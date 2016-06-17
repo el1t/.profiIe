@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-typeset profile
 
 # Download .profiIe
 if command -v curl >/dev/null 2>&1; then
@@ -11,7 +10,7 @@ else
 fi
 
 # Edit/create profile for current shell
-case ${SHELL:t} in
+case ${SHELL##*/} in
   (bash)
     profile='.bash_profile'
     ;;
@@ -22,15 +21,12 @@ case ${SHELL:t} in
     profile='.profile'
     ;;
 esac
-if [[ ! -s "~/$profile" ]]; then
-  touch "~/$profile"
-fi
-echo "source ~/.profiIe" >> "~/$profile"
+[[ -s "~/$profile" ]] || touch ~/"$profile"
 
 # Edit other existing profiles
-typeset -A profiles=('.bash_profile' '.zprofile' '.profile')
-for profile in $profiles; do
-  [[ -s "$profile" ]] && echo 'source ~/.profiIe' >> "~/$profile"
+profiles=('.bash_profile' '.zprofile' '.profile')
+for profile in "${profiles[@]}"; do
+  [[ -s ~/"$profile" ]] && echo && echo 'source ~/.profiIe' >> ~/"$profile"
 done
 
-source "~/$profile"
+source ~/.profiIe
